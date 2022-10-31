@@ -18,6 +18,7 @@ import com.stdio.oauthsample.presentation.ui.dialog.WebViewDialogFragment.Compan
 import com.stdio.oauthsample.presentation.viewmodel.MainViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 
 class BankListFragment : Fragment(R.layout.fragment_bank_list) {
@@ -25,7 +26,7 @@ class BankListFragment : Fragment(R.layout.fragment_bank_list) {
     private val viewModel by viewModel<MainViewModel>()
     private val binding by viewBinding(FragmentBankListBinding::bind)
     lateinit var adapter: BanksAdapter
-    private val BASE_URL: String by inject()
+    private val authUrl: String by inject(qualifier = named("auth_url"))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +37,7 @@ class BankListFragment : Fragment(R.layout.fragment_bank_list) {
         binding.rv.adapter = adapter
         subscribeObservers()
         WebViewDialogFragment
-            .newInstance("${BASE_URL}authorize?client_id=51463205&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=code&v=5.131&state=123456")
+            .newInstance("${authUrl}authorize?client_id=51463205&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=code&v=5.131&state=123456")
             .show(parentFragmentManager, KEY_WEB_VIEW_DIALOG)
         setFragmentResultListener(KEY_WEB_VIEW_DIALOG) {  requestKey, bundle ->
             val result = bundle.getString(ARG_URL)
@@ -50,8 +51,11 @@ class BankListFragment : Fragment(R.layout.fragment_bank_list) {
     }
 
     private fun subscribeObservers() {
-        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
+        viewModel.tokenState.subscribeInUI(this, binding.progressBar) {
             showSnackbar(it.token)
+        }
+        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
+            adapter.setDataList(it.response.items)
         }
     }
 }

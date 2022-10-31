@@ -20,4 +20,8 @@ class MainRepository(private val remoteDataSource: RemoteDataSource) : BaseRepos
                 )
             })
         }
+
+    suspend fun getFriends(fields: String, version: Double) = flow {
+        emit(apiCall { remoteDataSource.getFriends(fields, version) })
+    }
 }

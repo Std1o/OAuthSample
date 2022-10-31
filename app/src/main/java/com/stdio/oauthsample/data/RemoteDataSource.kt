@@ -1,5 +1,7 @@
 package com.stdio.oauthsample.data
 
+import retrofit2.http.Query
+
 class RemoteDataSource(private val mainService: MainService) {
 
     suspend fun getAccessToken(
@@ -8,4 +10,7 @@ class RemoteDataSource(private val mainService: MainService) {
         redirectUrl: String,
         code: String
     ) = mainService.getAccessToken(clientId, clientSecret, redirectUrl, code)
+
+    suspend fun getFriends(fields: String, version: Double) =
+        mainService.getFriends(fields, version)
 }
