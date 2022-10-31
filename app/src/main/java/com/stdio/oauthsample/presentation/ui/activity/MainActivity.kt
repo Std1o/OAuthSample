@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
             R.id.action_logout -> {
                 clearCookies(this)
                 findNavController(R.id.fragmentContainerView2).navigate(
-                    R.id.bankListFragment,
+                    R.id.mainFragment,
                     Bundle(),
                     NavOptions.Builder()
-                        .setPopUpTo(R.id.bankListFragment, true)
+                        .setPopUpTo(R.id.mainFragment, true)
                         .build()
                 )
             }
