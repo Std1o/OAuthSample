@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OAuthSample</string>
+
+    <string name="full_name">%s %s</string>
 </resources>

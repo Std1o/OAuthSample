@@ -19,9 +19,9 @@ class MainViewModel(private val repository: MainRepository) :
     private val _tokenState = MutableStateFlow<DataState<Token>>(DataState.Initial)
     val tokenState: StateFlow<DataState<Token>> = _tokenState.asStateFlow()
 
-    fun getFriends() {
+    private fun getFriends() {
         viewModelScope.launch {
-            launchRequest(repository.getFriends("nickname", 5.131))
+            launchRequest(repository.getFriends("photo_200_orig", 5.131))
         }
     }
 

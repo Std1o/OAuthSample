@@ -10,8 +10,8 @@ import com.stdio.oauthsample.R
 import com.stdio.oauthsample.common.showSnackbar
 import com.stdio.oauthsample.common.subscribeInUI
 import com.stdio.oauthsample.common.viewBinding
-import com.stdio.oauthsample.databinding.FragmentBankListBinding
-import com.stdio.oauthsample.presentation.ui.adapter.BanksAdapter
+import com.stdio.oauthsample.databinding.FragmentMainBinding
+import com.stdio.oauthsample.presentation.ui.adapter.FriendsAdapter
 import com.stdio.oauthsample.presentation.ui.dialog.WebViewDialogFragment
 import com.stdio.oauthsample.presentation.ui.dialog.WebViewDialogFragment.Companion.ARG_URL
 import com.stdio.oauthsample.presentation.ui.dialog.WebViewDialogFragment.Companion.KEY_WEB_VIEW_DIALOG
@@ -21,18 +21,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 
 
-class BankListFragment : Fragment(R.layout.fragment_bank_list) {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val viewModel by viewModel<MainViewModel>()
-    private val binding by viewBinding(FragmentBankListBinding::bind)
-    lateinit var adapter: BanksAdapter
+    private val binding by viewBinding(FragmentMainBinding::bind)
+    lateinit var adapter: FriendsAdapter
     private val authUrl: String by inject(qualifier = named("auth_url"))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = BanksAdapter {
-
-        }
+        adapter = FriendsAdapter()
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
         subscribeObservers()
@@ -52,7 +50,7 @@ class BankListFragment : Fragment(R.layout.fragment_bank_list) {
 
     private fun subscribeObservers() {
         viewModel.tokenState.subscribeInUI(this, binding.progressBar) {
-            showSnackbar(it.token)
+            // TODO nothing
         }
         viewModel.uiState.subscribeInUI(this, binding.progressBar) {
             adapter.setDataList(it.response.items)
