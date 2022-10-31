@@ -29,7 +29,6 @@ val appModule = module {
     }
 
     fun provideHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient.Builder {
-        println(AccountSession.instance.token)
         return OkHttpClient.Builder()
             .callTimeout(1, TimeUnit.MINUTES)
             .retryOnConnectionFailure(true)
