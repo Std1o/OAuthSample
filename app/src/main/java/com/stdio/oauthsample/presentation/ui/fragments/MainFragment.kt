@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stdio.oauthsample.R
+import com.stdio.oauthsample.common.AccountSession
 import com.stdio.oauthsample.common.showSnackbar
 import com.stdio.oauthsample.common.subscribeInUI
 import com.stdio.oauthsample.common.viewBinding
@@ -34,9 +35,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
         subscribeObservers()
-        WebViewDialogFragment
-            .newInstance("${authUrl}authorize?client_id=51463205&display=mobile&redirect_uri=https://oauth.vk.com/blank.html&scope=friends&response_type=code&v=5.131&state=123456")
-            .show(parentFragmentManager, KEY_WEB_VIEW_DIALOG)
+        if (AccountSession.instance.token.isNullOrEmpty()) {
+            WebViewDialogFragment
+                .newInstance("${authUrl}authorize?client_id=51463205" +
+                        "&display=mobile&redirect_uri=https://oauth.vk.com/blank.html" +
+                        "&scope=friends&response_type=code&v=5.131&state=123456")
+                .show(parentFragmentManager, KEY_WEB_VIEW_DIALOG)
+        }
         setFragmentResultListener(KEY_WEB_VIEW_DIALOG) {  requestKey, bundle ->
             val result = bundle.getString(ARG_URL)
             val uri = Uri.parse(result)

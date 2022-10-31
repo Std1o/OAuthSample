@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.stdio.oauthsample.R
+import com.stdio.oauthsample.common.AccountSession
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         super.onOptionsItemSelected(item)
         when (item.itemId) {
             R.id.action_logout -> {
+                AccountSession.instance.token = null
+                AccountSession.instance.userId = null
                 clearCookies(this)
                 findNavController(R.id.fragmentContainerView2).navigate(
                     R.id.mainFragment,
